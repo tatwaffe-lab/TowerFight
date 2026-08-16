@@ -1,0 +1,15 @@
+# Render Blueprint — legt den Service automatisch an.
+# In Render: "New" -> "Blueprint" -> Repo auswählen. Render liest diese Datei.
+services:
+  - type: web
+    name: tower-draft-siege
+    runtime: node
+    plan: starter          # WICHTIG: nicht "free" — Free-Instanzen schlafen nach 15 Min ein
+                           # und trennen dabei alle WebSocket-Verbindungen (Match geht verloren).
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
