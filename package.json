@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "description": "Browser-basiertes 2-4 Spieler kompetitives Tower Defense mit Sabotage-Mechanik.",
   "type": "module",
-  "main": "server/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node index.js"
   },
   "engines": {
     "node": ">=20"
