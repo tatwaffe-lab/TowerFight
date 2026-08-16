@@ -4,8 +4,10 @@ services:
   - type: web
     name: tower-draft-siege
     runtime: node
-    plan: starter          # WICHTIG: nicht "free" — Free-Instanzen schlafen nach 15 Min ein
-                           # und trennen dabei alle WebSocket-Verbindungen (Match geht verloren).
+    plan: free             # Free: schläft nach 15 Min OHNE Traffic ein. Während einer Partie
+                           # fließt ständig WebSocket-Verkehr (plus Client-Heartbeat), das hält
+                           # den Dienst wach. Nur der allererste Aufruf nach einer Pause dauert
+                           # ~1 Minute (Kaltstart). Für Dauerbetrieb später auf "starter" wechseln.
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /healthz

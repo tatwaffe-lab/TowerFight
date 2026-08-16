@@ -22,11 +22,17 @@ Alles ist vorbereitet (`render.yaml`, Health-Endpoint `/healthz`, `PORT` aus Umg
 
 3. Nach dem Build bekommst du eine URL wie `https://tower-draft-siege.onrender.com`. Die gibst du deinen Mitspielern — der Client verbindet sich automatisch per `wss://` zur selben Domain, es ist nichts weiter zu konfigurieren.
 
-## Warum nicht der Free-Plan
+## Free-Plan: was das bedeutet
 
-Render fährt Free-Instanzen nach **15 Minuten ohne Traffic** herunter und schließt dabei **alle offenen Verbindungen ohne Vorwarnung**. Da dieses Spiel den kompletten Match-State im Arbeitsspeicher hält und über dauerhafte WebSocket-Verbindungen läuft, bedeutet das: laufende Partien brechen ab und sind weg. Das Hochfahren dauert danach knapp eine Minute.
+In `render.yaml` steht `plan: free`. Render fährt Free-Instanzen nach **15 Minuten ohne eingehenden Traffic** herunter.
 
-In `render.yaml` steht deshalb `plan: starter` (kostenpflichtig, ca. 7 $/Monat). Zum reinen Ausprobieren kannst du `free` eintragen — dann aber mit dem Wissen, dass Matches beim Einschlafen sterben.
+Für dieses Spiel ist das weniger schlimm, als es klingt:
+
+- **Während einer Partie** sendet der Server alle 150 ms Zustandsupdates, zusätzlich schickt jeder Client alle 25 Sekunden einen Heartbeat (`ping`). Es fließt also durchgehend Verkehr — der Dienst schläft mitten im Match nicht ein.
+- **Nach einer Pause** ist der Dienst heruntergefahren. Der erste Aufruf der URL dauert dann rund eine Minute, bis der Server wieder hochgefahren ist. Danach läuft alles normal. Einfach die Seite aufrufen und warten.
+- **Der Match-Zustand liegt im Arbeitsspeicher.** Fährt der Dienst herunter oder wird eine neue Version deployt, sind laufende Partien und Raumcodes weg. Bei einem verabredeten Spieleabend ist das kein Problem.
+
+Wenn euch der Kaltstart stört, in `render.yaml` auf `plan: starter` wechseln (ca. 7 $/Monat, kein Spin-Down) und neu deployen.
 
 ## Alternativen ohne Spin-Down
 
